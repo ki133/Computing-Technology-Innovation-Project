@@ -1,13 +1,20 @@
+// src/App.js
+
 import React, { useState } from 'react';
 import styles from './App.module.css';
 import logo from './assets/logo.png';
+import DelayForm from './components/DelayForm';
+import PriceForm from './components/PriceForm';
+import TravelForm from './components/TravelForm';
 
 function App() {
   const [selectedSection, setSelectedSection] = useState('home');
-  const [selectedServiceTab, setSelectedServiceTab] = useState('flightPrice');
+  const [selectedServiceTab, setSelectedServiceTab] = useState('flightSchedule'); // Default to Delay Prediction
+  const [result, setResult] = useState(null); // Store prediction results here
 
   const handleLogoClick = () => {
-    setSelectedSection('home'); // Navigate to Home when the logo is clicked
+    setSelectedSection('home');
+    setResult(null); // Clear results when navigating to home
   };
 
   const renderContent = () => {
@@ -18,7 +25,7 @@ function App() {
             <h2>Welcome to Our Flight Prediction Platform</h2>
             <p>
               Unlock the best deals and never miss a flight update again! Our platform
-              predicts flight prices and delays to make your travel planning easier
+              predicts flight prices, delays, and travel metrics to make your travel planning easier
               and smarter.
             </p>
           </div>
@@ -40,31 +47,35 @@ function App() {
             <h2>Our Services</h2>
             <div className={styles.tabContainer}>
               <button
-                className={`${styles.tabButton} ${selectedServiceTab === 'flightPrice' ? styles.active : ''}`}
-                onClick={() => setSelectedServiceTab('flightPrice')}
+                className={`${styles.tabButton} ${selectedServiceTab === 'flightSchedule' ? styles.active : ''}`}
+                onClick={() => { setSelectedServiceTab('flightSchedule'); setResult(null); }}
               >
-                Flight Price
+                Flight Delay Prediction
               </button>
               <button
-                className={`${styles.tabButton} ${selectedServiceTab === 'flightSchedule' ? styles.active : ''}`}
-                onClick={() => setSelectedServiceTab('flightSchedule')}
+                className={`${styles.tabButton} ${selectedServiceTab === 'flightPrice' ? styles.active : ''}`}
+                onClick={() => { setSelectedServiceTab('flightPrice'); setResult(null); }}
               >
-                Flight Schedule
+                Flight Price Prediction
+              </button>
+              <button
+                className={`${styles.tabButton} ${selectedServiceTab === 'travelMetrics' ? styles.active : ''}`}
+                onClick={() => { setSelectedServiceTab('travelMetrics'); setResult(null); }}
+              >
+                Travel Metrics Prediction
               </button>
             </div>
             <div className={styles.tabContent}>
-              {selectedServiceTab === 'flightPrice' ? (
-                <div>
-                  <h3>Flight Price Prediction</h3>
-                  <p>Get insights into the best times to book flights at the lowest prices.</p>
-                </div>
-              ) : (
-                <div>
-                  <h3>Flight Schedule and Delays</h3>
-                  <p>Stay updated on flight schedules and potential delays for better planning.</p>
-                </div>
-              )}
+              {selectedServiceTab === 'flightSchedule' && <DelayForm setResult={setResult} />}
+              {selectedServiceTab === 'flightPrice' && <PriceForm setResult={setResult} />}
+              {selectedServiceTab === 'travelMetrics' && <TravelForm setResult={setResult} />}
             </div>
+            {result && (
+              <div className={styles.result}>
+                <h3>Prediction Result:</h3>
+                <pre>{JSON.stringify(result, null, 2)}</pre>
+              </div>
+            )}
           </div>
         );
       case 'contact':
@@ -87,7 +98,7 @@ function App() {
   return (
     <div className={styles.container}>
       <header className={styles.header}>
-        <img src={logo} alt="Lucky Flight Logo" className={styles.logo} onClick={handleLogoClick} /> {/* Logo is clickable */}
+        <img src={logo} alt="Lucky Flight Logo" className={styles.logo} onClick={handleLogoClick} />
         <h1 className={styles.title}>Flight Prediction Platform</h1>
       </header>
       <div className={styles.body}>
@@ -95,16 +106,16 @@ function App() {
           <nav>
             <ul>
               <li>
-                <button onClick={() => setSelectedSection('home')}>Home</button>
+                <button onClick={() => { setSelectedSection('home'); setResult(null); }}>Home</button>
               </li>
               <li>
-                <button onClick={() => setSelectedSection('about')}>About</button>
+                <button onClick={() => { setSelectedSection('about'); setResult(null); }}>About</button>
               </li>
               <li>
-                <button onClick={() => setSelectedSection('services')}>Services</button>
+                <button onClick={() => { setSelectedSection('services'); setResult(null); }}>Services</button>
               </li>
               <li>
-                <button onClick={() => setSelectedSection('contact')}>Contact</button>
+                <button onClick={() => { setSelectedSection('contact'); setResult(null); }}>Contact</button>
               </li>
             </ul>
           </nav>
@@ -114,7 +125,7 @@ function App() {
         </main>
       </div>
       <footer className={styles.footer}>
-        <p>&copy; Lucky Eight. All rights reserved.</p>
+        <p>&copy; 2024 Flight Prediction Platform. All rights reserved.</p>
       </footer>
     </div>
   );

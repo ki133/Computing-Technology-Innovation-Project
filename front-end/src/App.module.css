@@ -44,7 +44,6 @@
   width: 200px;
 }
 
-/* Sidebar button styling */
 .sidebar button {
   background: none;
   border: none;
@@ -61,10 +60,9 @@
 }
 
 .sidebar button:focus {
-  outline: 2px solid #292929; /* Blue outline for active button */
+  outline: 2px solid #292929; /* Dark outline for active button */
   color: #292929;
 }
-
 
 /* Main Content */
 .mainContent {
@@ -114,4 +112,16 @@
   background-color: #f0f0f0; /* Light gray background for tab content */
   border: 1px solid #c0c0c0;
   border-radius: 4px;
+}
+
+/* Result Display */
+.result {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #f9f9f9; /* Light background for result display */
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  color: #333;
+  font-family: monospace;
+  white-space: pre-wrap; /* Allows multiline formatting */
 }
